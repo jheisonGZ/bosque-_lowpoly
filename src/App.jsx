@@ -231,8 +231,6 @@ const GLOBAL_STYLES = `
   /* Evita que iOS haga zoom al tocar inputs/botones */
   button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
-  /* Evita scroll/bounce de iOS en el canvas */
-  canvas { touch-action: none; }
 `;
 
 // ─── PANEL INFORMATIVO ────────────────────────────────────────────────────────
@@ -699,7 +697,7 @@ export default function App() {
           toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1,
         }}
         onCreated={() => setReady(true)}
-        style={{ touchAction: "none" }}
+    
       >
         <SkyDome /><Sun />
         <Cloud position={[-6,  8,  -8]} scale={1.3} />
