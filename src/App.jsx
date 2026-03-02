@@ -879,9 +879,10 @@ export default function App() {
           <div style={{
             position: "absolute",
             bottom: 0,
+            top:0,
             left: 0,
             right: 0,
-            paddingBottom: "max(env(safe-area-inset-bottom, 0px), 32px)",
+            paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)",
             paddingTop: 10,
             display: "flex",
             justifyContent: "center",
