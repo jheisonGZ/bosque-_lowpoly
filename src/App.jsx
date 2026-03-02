@@ -223,6 +223,13 @@ const GLOBAL_STYLES = `
     .intro-title { font-size: 26px !important; }
     .intro-sub   { font-size: 26px !important; }
     .integrantes-box { display: none !important; }
+
+    /* 🔥 BOTONES MÁS GRANDES EN MÓVIL */
+  .btn-ui {
+    min-width: 48px !important;
+    min-height: 48px !important;
+  }
+
   }
   @media (max-width: 400px) {
     .info-grid { grid-template-columns: 1fr !important; }
@@ -230,6 +237,8 @@ const GLOBAL_STYLES = `
 
   /* Evita que iOS haga zoom al tocar inputs/botones */
   button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+  
 
 `;
 
@@ -747,63 +756,73 @@ export default function App() {
 
           {/* BARRA DE BOTONES INFERIOR — siempre visible y fuera del canvas */}
           <div style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0, right: 0,
-            height: `calc(56px + env(safe-area-inset-bottom, 0px))`,
-            paddingBottom: "env(safe-area-inset-bottom, 0px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingLeft: 16,
-            paddingRight: 16,
-            pointerEvents: "none",
-            zIndex: 50,
-          }}>
-            {/* BOTÓN INFO */}
-            <button
-              onClick={() => setShowInfo(true)}
-              className="btn-ui"
-              style={{
-                pointerEvents: "all",
-                background: "rgba(0,0,0,0.6)",
-                border: "1px solid rgba(74,222,128,0.3)",
-                borderRadius: 4, padding: "0 18px", height: 44,
-                color: "#4ade80", fontSize: 10,
-                fontFamily: "'Space Mono', monospace", fontWeight: 700,
-                letterSpacing: 3, cursor: "pointer",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                display: "flex", alignItems: "center", gap: 6,
-              }}
-            >
-              🌿 INFO
-            </button>
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  paddingBottom: "env(safe-area-inset-bottom, 12px)",
+  paddingTop: 10,
+  display: "flex",
+  justifyContent: "center",
+  gap: 18,
+  pointerEvents: "none",
+  zIndex: 60,
+}}>
+  
+  {/* INFO */}
+  <button
+    onClick={() => setShowInfo(true)}
+    className="btn-ui"
+    style={{
+      pointerEvents: "all",
+      background: "rgba(0,0,0,0.75)",
+      border: "1px solid rgba(74,222,128,0.5)",
+      borderRadius: 8,
+      padding: "0 22px",
+      height: 48,
+      color: "#4ade80",
+      fontSize: 11,
+      fontFamily: "'Space Mono', monospace",
+      fontWeight: 700,
+      letterSpacing: 2,
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
+    }}
+  >
+    🌿 INFO
+  </button>
 
-            {/* BOTÓN MUTE — con feedback visual claro */}
-            <button
-              onClick={toggleMute}
-              className="btn-ui"
-              title={muted ? "Activar sonido" : "Silenciar"}
-              style={{
-                pointerEvents: "all",
-                background: muted
-                  ? "rgba(74,222,128,0.12)"
-                  : "rgba(0,0,0,0.6)",
-                border: muted
-                  ? "1px solid rgba(74,222,128,0.6)"
-                  : "1px solid rgba(74,222,128,0.3)",
-                borderRadius: "50%", width: 44, height: 44,
-                color: "#4ade80", fontSize: 20, cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                transition: "all 0.2s ease",
-              }}
-            >
-              {muted ? "🔇" : "🔊"}
-            </button>
-          </div>
+  {/* AUDIO */}
+  <button
+    onClick={toggleMute}
+    className="btn-ui"
+    title={muted ? "Activar sonido" : "Silenciar"}
+    style={{
+      pointerEvents: "all",
+      background: muted
+        ? "rgba(74,222,128,0.15)"
+        : "rgba(0,0,0,0.75)",
+      border: muted
+        ? "1px solid rgba(74,222,128,0.8)"
+        : "1px solid rgba(74,222,128,0.5)",
+      borderRadius: "50%",
+      width: 48,
+      height: 48,
+      color: "#4ade80",
+      fontSize: 22,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
+    }}
+  >
+    {muted ? "🔇" : "🔊"}
+  </button>
+
+</div>
         </>
       )}
     </div>
