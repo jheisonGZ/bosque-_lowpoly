@@ -720,15 +720,15 @@ export default function App() {
         <hemisphereLight args={["#87ceeb", "#4a7c45", 1.2]} />
         <Suspense fallback={null}><Model /></Suspense>
         <OrbitControls
-          enableZoom enablePan={false} enableDamping
-          dampingFactor={0.06}
-          minPolarAngle={Math.PI / 10}
-          maxPolarAngle={Math.PI / 2.1}
-          touches={{
-            ONE: 2,   // TOUCH_ROTATE
-            TWO: 512, // TOUCH_DOLLY_PAN
-          }}
-        />
+  enableZoom={true}
+  enablePan={false}
+  enableDamping={true}
+  dampingFactor={0.08}
+  rotateSpeed={0.8}
+  zoomSpeed={0.8}
+  minPolarAngle={Math.PI / 10}
+  maxPolarAngle={Math.PI / 2.1}
+/>
       </Canvas>
 
       {/* ── UI OVERLAY — siempre visible, posición safe ── */}
