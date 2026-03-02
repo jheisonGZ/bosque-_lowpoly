@@ -232,6 +232,15 @@ const GLOBAL_STYLES = `
   }
 
   button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+ @media (max-width: 600px) {
+  .desktop-grid     { display: none !important; }
+  .mobile-accordion { display: flex !important; }
+}
+@media (min-width: 601px) {
+  .desktop-grid     { display: grid !important; }
+  .mobile-accordion { display: none !important; }
+}
+
 `;
 
 // ─── DATOS ────────────────────────────────────────────────────────────────────
@@ -286,35 +295,35 @@ function InfoPanel({ onClose }) {
         boxShadow: "0 32px 100px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.05)",
         overflow: "hidden",
       }}>
+
         {/* Línea top */}
         <div style={{ height: 2, background: "linear-gradient(90deg, transparent, #4ade80, #86efac, #4ade80, transparent)", flexShrink: 0 }} />
 
         {/* Header */}
-        <div className="panel-pad" style={{
-          padding: "16px 24px 14px",
+        <div style={{
+          padding: "14px 20px 12px",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
           display: "flex", justifyContent: "space-between", alignItems: "center",
           flexShrink: 0,
         }}>
           <div>
-            <div className="info-title" style={{
+            <div style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: 20, fontWeight: 900, letterSpacing: 2,
+              fontSize: "clamp(14px, 4vw, 20px)", fontWeight: 900, letterSpacing: 2,
               color: "#f0fdf4", marginBottom: 4,
               textShadow: "0 0 30px rgba(74,222,128,0.3)",
             }}>
               EL BOSQUE COMO SISTEMA
             </div>
             <div style={{
-              color: "#4ade80", fontSize: 9,
-              fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: 3,
+              color: "#4ade80", fontSize: "clamp(7px, 2vw, 9px)",
+              fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: 2,
             }}>
               TEORÍA GENERAL DE SISTEMAS · VON BERTALANFFY
             </div>
           </div>
           <button
             onClick={onClose}
-            className="btn-ui"
             aria-label="Cerrar panel"
             style={{
               background: "rgba(255,255,255,0.04)",
@@ -322,16 +331,16 @@ function InfoPanel({ onClose }) {
               borderRadius: "50%", width: 44, height: 44,
               color: "#86efac", cursor: "pointer", fontSize: 16,
               display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
+              flexShrink: 0, transition: "all 0.2s ease",
             }}
           >✕</button>
         </div>
 
         {/* Intro */}
-        <div className="panel-pad" style={{
-          padding: "10px 24px",
+        <div style={{
+          padding: "10px 20px",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
-          color: "#bbf7d0", fontSize: 11,
+          color: "#bbf7d0", fontSize: "clamp(10px, 2.5vw, 11px)",
           fontFamily: "'Space Mono', monospace", lineHeight: 1.8,
           flexShrink: 0, background: "rgba(74,222,128,0.03)",
         }}>
@@ -340,72 +349,86 @@ function InfoPanel({ onClose }) {
           energéticos, materiales e informacionales. Un sistema vivo donde el todo es más que la suma de sus partes.
         </div>
 
-        {/* Grid cards */}
-        <div
-          className="iscroll info-grid panel-pad"
-          style={{
-            overflowY: "auto",
-            WebkitOverflowScrolling: "touch",
-            padding: "12px 16px 16px",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 8,
-            flex: 1,
-          }}
-        >
-          {SECTIONS.map((s, i) => (
-            <div
-              key={i}
-              className={`icard${active === i ? " active" : ""}`}
-              onClick={() => setActive(active === i ? null : i)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && setActive(active === i ? null : i)}
-              style={{
-                background: "rgba(255,255,255,0.025)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 7, padding: "12px 12px",
-              }}
-            >
-              <div style={{ fontSize: 18, marginBottom: 6 }}>{s.icon}</div>
+        {/* Contenido */}
+        <div className="iscroll" style={{ overflowY: "auto", WebkitOverflowScrolling: "touch", flex: 1, padding: "12px 14px 16px" }}>
 
-              <div className="card-title" style={{
-                color: "#4ade80", fontSize: 9,
-                fontFamily: "'Space Mono', monospace", fontWeight: 700,
-                letterSpacing: 1.5, marginBottom: 6, lineHeight: 1.4,
-              }}>
-                {s.title.toUpperCase()}
-              </div>
-
-              <div className="card-body" style={{
-                maxHeight: active === i ? "400px" : "0px",
-                opacity: active === i ? 1 : 0,
-              }}>
-                <div className="card-text" style={{
-                  color: "#d1fae5", fontSize: 11,
-                  fontFamily: "'Space Mono', monospace", lineHeight: 1.7,
-                  paddingBottom: 4,
-                }}>
-                  {s.text}
+          {/* DESKTOP: grid 3 columnas */}
+          <div className="desktop-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {SECTIONS.map((s, i) => (
+              <div
+                key={i}
+                className={`icard${active === i ? " active" : ""}`}
+                onClick={() => setActive(active === i ? null : i)}
+                role="button" tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setActive(active === i ? null : i)}
+                style={{
+                  background: "rgba(255,255,255,0.025)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: 7, padding: "12px",
+                }}
+              >
+                <div style={{ fontSize: 18, marginBottom: 6 }}>{s.icon}</div>
+                <div style={{ color: "#4ade80", fontSize: 9, fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: 1.5, marginBottom: 6, lineHeight: 1.4 }}>
+                  {s.title.toUpperCase()}
+                </div>
+                <div className="card-body" style={{ maxHeight: active === i ? "400px" : "0px", opacity: active === i ? 1 : 0 }}>
+                  <div style={{ color: "#d1fae5", fontSize: 11, fontFamily: "'Space Mono', monospace", lineHeight: 1.7, paddingBottom: 4 }}>
+                    {s.text}
+                  </div>
+                </div>
+                <div style={{ color: active === i ? "#4ade80" : "#1e4d2b", fontSize: 9, fontFamily: "'Space Mono', monospace", fontWeight: 700, marginTop: 4, letterSpacing: 1, transition: "color 0.2s ease" }}>
+                  {active === i ? "CERRAR ↑" : "VER MÁS ↓"}
                 </div>
               </div>
+            ))}
+          </div>
 
-              <div className="ver-mas" style={{
-                color: active === i ? "#4ade80" : "#1e4d2b",
-                fontSize: 9,
-                fontFamily: "'Space Mono', monospace", fontWeight: 700,
-                marginTop: 4, letterSpacing: 1,
-                transition: "color 0.2s ease",
-              }}>
-                {active === i ? "CERRAR ↑" : "VER MÁS ↓"}
+          {/* MÓVIL: acordeón */}
+          <div className="mobile-accordion" style={{ display: "none", flexDirection: "column", gap: 6 }}>
+            {SECTIONS.map((s, i) => (
+              <div
+                key={i}
+                onClick={() => setActive(active === i ? null : i)}
+                role="button" tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setActive(active === i ? null : i)}
+                style={{
+                  background: active === i ? "rgba(74,222,128,0.08)" : "rgba(255,255,255,0.025)",
+                  border: `1px solid ${active === i ? "rgba(74,222,128,0.5)" : "rgba(255,255,255,0.07)"}`,
+                  borderRadius: 8, overflow: "hidden",
+                  transition: "all 0.2s ease", cursor: "pointer",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", padding: "13px 14px", gap: 12 }}>
+                  <span style={{ fontSize: 22, flexShrink: 0 }}>{s.icon}</span>
+                  <span style={{ color: "#4ade80", fontSize: 13, fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: 1, flex: 1 }}>
+                    {s.title.toUpperCase()}
+                  </span>
+                  <span style={{
+                    color: active === i ? "#4ade80" : "#2d6a3f",
+                    fontSize: 14, transition: "transform 0.3s ease",
+                    transform: active === i ? "rotate(180deg)" : "rotate(0deg)",
+                    display: "inline-block",
+                  }}>▼</span>
+                </div>
+                <div style={{
+                  maxHeight: active === i ? "300px" : "0px",
+                  opacity: active === i ? 1 : 0,
+                  overflow: "hidden",
+                  transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
+                }}>
+                  <div style={{ color: "#d1fae5", fontSize: 13, fontFamily: "'Space Mono', monospace", lineHeight: 1.8, padding: "0 14px 14px 48px" }}>
+                    {s.text}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
         </div>
 
         {/* Footer */}
-        <div className="panel-pad" style={{
-          padding: "10px 24px",
+        <div style={{
+          padding: "10px 20px",
           borderTop: "1px solid rgba(255,255,255,0.04)",
           color: "#166534", fontSize: 9,
           fontFamily: "'Space Mono', monospace", fontWeight: 700,
