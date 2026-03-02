@@ -631,7 +631,7 @@ export default function App() {
             ARRASTRA · ZOOM
           </div>
 
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)", paddingTop: 10, display: "flex", justifyContent: "center", gap: 18, zIndex: 60 }}>
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, paddingBottom: "max(env(safe-area-inset-bottom, 0px), 60px)", paddingTop: 10, display: "flex", justifyContent: "center", gap: 18, zIndex: 60 }}>
             <button
               onClick={() => setShowInfo(true)}
               className="btn-ui"
