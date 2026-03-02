@@ -198,24 +198,41 @@ const GLOBAL_STYLES = `
   .iscroll::-webkit-scrollbar-track { background: transparent; }
   .iscroll::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 2px; }
 
-  .btn-ui { transition: all 0.2s ease; }
+  .btn-ui {
+    transition: all 0.2s ease;
+    /* Área táctil mínima recomendada para móvil */
+    min-width: 44px;
+    min-height: 44px;
+  }
   .btn-ui:hover {
     background: rgba(0,0,0,0.65) !important;
     border-color: rgba(134,239,172,0.5) !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   }
+  .btn-ui:active {
+    transform: scale(0.95) !important;
+    opacity: 0.85;
+  }
 
+  /* ── RESPONSIVE ─────────────────────────────────────── */
   @media (max-width: 600px) {
     .info-grid { grid-template-columns: 1fr 1fr !important; }
-    .info-title { font-size: 16px !important; }
-    .panel-pad { padding: 16px 16px !important; }
-    .intro-title { font-size: 28px !important; }
-    .intro-sub { font-size: 28px !important; }
+    .info-title { font-size: 15px !important; }
+    .panel-pad { padding: 12px 14px !important; }
+    .intro-title { font-size: 26px !important; }
+    .intro-sub   { font-size: 26px !important; }
+    .integrantes-box { display: none !important; }
   }
   @media (max-width: 400px) {
     .info-grid { grid-template-columns: 1fr !important; }
   }
+
+  /* Evita que iOS haga zoom al tocar inputs/botones */
+  button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+  /* Evita scroll/bounce de iOS en el canvas */
+  canvas { touch-action: none; }
 `;
 
 // ─── PANEL INFORMATIVO ────────────────────────────────────────────────────────
@@ -243,8 +260,12 @@ function InfoPanel({ onClose }) {
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "rgba(0,0,0,0.78)",
       backdropFilter: "blur(10px)",
-      padding: "16px",
-    }}>
+      padding: "12px",
+      // Permite cerrar tocando el fondo en móvil
+      WebkitOverflowScrolling: "touch",
+    }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
       <div style={{
         background: "linear-gradient(160deg, #020c04 0%, #061510 60%, #020c04 100%)",
         border: "1px solid rgba(74,222,128,0.22)",
@@ -285,8 +306,8 @@ function InfoPanel({ onClose }) {
           </div>
           <button onClick={onClose} className="btn-ui" style={{
             background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)",
-            borderRadius: "50%", width: 34, height: 34, color: "#86efac",
-            cursor: "pointer", fontSize: 15, display: "flex",
+            borderRadius: "50%", width: 44, height: 44, color: "#86efac",
+            cursor: "pointer", fontSize: 16, display: "flex",
             alignItems: "center", justifyContent: "center", flexShrink: 0,
           }}>✕</button>
         </div>
@@ -306,7 +327,9 @@ function InfoPanel({ onClose }) {
 
         {/* Grid cards */}
         <div className="iscroll info-grid panel-pad" style={{
-          overflowY: "auto", padding: "18px 28px 22px",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          padding: "18px 28px 22px",
           display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10,
         }}>
           {sections.map((s, i) => (
@@ -381,12 +404,10 @@ function IntroScreen({ onEnter }) {
   const [loaded, setLoaded]     = useState(false);
   const [fadeOut, setFadeOut]   = useState(false);
 
-  // ← CAMBIA AQUÍ LOS NOMBRES DE TU GRUPO
   const integrantes = [
-"Jheison gomez muñoz - 2310215", 
-"Cristian Daniel Medina - 2310117", 
-"Hassen Ortiz - 2177273",
-   
+    "Jheison gomez muñoz - 2310215",
+    "Cristian Daniel Medina - 2310117",
+    "Hassen Ortiz - 2177273",
   ];
 
   useEffect(() => {
@@ -448,12 +469,12 @@ function IntroScreen({ onEnter }) {
         }} />
       ))}
 
-      {/* INTEGRANTES — esquina superior izquierda */}
-      <div style={{
-        position: "absolute", top: 20, left: 20, zIndex: 10,
+      {/* INTEGRANTES — esquina superior izquierda, oculta en móvil pequeño */}
+      <div className="integrantes-box" style={{
+        position: "absolute", top: 16, left: 16, zIndex: 10,
         background: "rgba(0,0,0,0.45)",
         border: "1px solid rgba(74,222,128,0.2)",
-        borderRadius: 6, padding: "12px 16px",
+        borderRadius: 6, padding: "10px 14px",
         backdropFilter: "blur(8px)",
         animation: "fadeUp 0.8s 0.3s ease both",
         animationFillMode: "both",
@@ -479,10 +500,14 @@ function IntroScreen({ onEnter }) {
       </div>
 
       {/* Contenido central */}
-      <div style={{ position: "relative", zIndex: 3, display: "flex", flexDirection: "column", alignItems: "center", padding: "0 20px" }}>
+      <div style={{
+        position: "relative", zIndex: 3,
+        display: "flex", flexDirection: "column", alignItems: "center",
+        padding: "0 20px", width: "100%", maxWidth: 480,
+      }}>
 
         <div style={{
-          fontSize: 68, marginBottom: 24,
+          fontSize: 64, marginBottom: 20,
           animation: "fadeUp 0.8s ease both, glow 3s ease-in-out infinite",
           filter: "drop-shadow(0 0 30px rgba(74,222,128,0.6))",
         }}>🌲</div>
@@ -520,7 +545,7 @@ function IntroScreen({ onEnter }) {
         <div style={{
           color: "#86efac", fontSize: 10,
           fontFamily: "'Space Mono', monospace", fontWeight: 700,
-          letterSpacing: 5, marginBottom: 44, textAlign: "center",
+          letterSpacing: 5, marginBottom: 36, textAlign: "center",
           animation: "fadeUp 0.8s 0.4s ease both", animationFillMode: "both",
         }}>
           MUNDO INTERACTIVO 3D
@@ -528,7 +553,7 @@ function IntroScreen({ onEnter }) {
 
         {/* Barra de progreso */}
         <div style={{
-          width: "min(280px, 80vw)", marginBottom: 34,
+          width: "min(280px, 85vw)", marginBottom: 30,
           animation: "fadeUp 0.8s 0.5s ease both", animationFillMode: "both",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
@@ -565,7 +590,7 @@ function IntroScreen({ onEnter }) {
           disabled={!loaded}
           className={loaded ? "btn-enter" : ""}
           style={{
-            padding: "15px 52px",
+            padding: "15px 48px",
             background: loaded ? "linear-gradient(135deg, #14532d, #166534)" : "rgba(255,255,255,0.03)",
             border: loaded ? "1px solid rgba(74,222,128,0.6)" : "1px solid rgba(255,255,255,0.07)",
             borderRadius: 3,
@@ -576,6 +601,7 @@ function IntroScreen({ onEnter }) {
             animation: loaded ? "pulse-ring 2.5s infinite, fadeUp 0.6s ease both" : "fadeUp 0.6s ease both",
             animationFillMode: "both", outline: "none",
             boxShadow: loaded ? "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)" : "none",
+            minHeight: 52,
           }}
         >
           {loaded ? "✦  ENTRAR AL BOSQUE  ✦" : "PREPARANDO..."}
@@ -583,7 +609,7 @@ function IntroScreen({ onEnter }) {
 
         {loaded && (
           <div style={{
-            marginTop: 20, color: "#166534",
+            marginTop: 18, color: "#166534",
             fontFamily: "'Space Mono', monospace", fontWeight: 700,
             fontSize: 9, letterSpacing: 4,
             animation: "fadeUp 0.5s 0.2s ease both", animationFillMode: "both",
@@ -624,12 +650,22 @@ export default function App() {
     }
   };
 
+  // ✅ Fix: mute/unmute correcto usando la propiedad muted del elemento audio
   const toggleMute = () => {
-    if (audioRef.current) { audioRef.current.muted = !muted; setMuted(!muted); }
+    if (audioRef.current) {
+      const newMuted = !muted;
+      audioRef.current.muted = newMuted;
+      setMuted(newMuted);
+    }
   };
 
   return (
-    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+    <div style={{
+      width: "100vw", height: "100vh",
+      // Evita el scroll/bounce del navegador móvil
+      overflow: "hidden",
+      position: "fixed", top: 0, left: 0,
+    }}>
       <style>{GLOBAL_STYLES}</style>
 
       {!entered && <IntroScreen onEnter={handleEnter} />}
@@ -663,6 +699,7 @@ export default function App() {
           toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1,
         }}
         onCreated={() => setReady(true)}
+        style={{ touchAction: "none" }}
       >
         <SkyDome /><Sun />
         <Cloud position={[-6,  8,  -8]} scale={1.3} />
@@ -687,50 +724,89 @@ export default function App() {
           dampingFactor={0.06}
           minPolarAngle={Math.PI / 10}
           maxPolarAngle={Math.PI / 2.1}
+          touches={{
+            ONE: 2,   // TOUCH_ROTATE
+            TWO: 512, // TOUCH_DOLLY_PAN
+          }}
         />
       </Canvas>
 
-      {/* TEXTO AYUDA */}
+      {/* ── UI OVERLAY — siempre visible, posición safe ── */}
       {entered && ready && (
-        <div style={{
-          position: "absolute", bottom: 20, left: "50%",
-          transform: "translateX(-50%)",
-          color: "rgba(0, 8, 3, 0.35)", fontSize: 20,
-          fontFamily: "'Space Mono', monospace", fontWeight: 700,
-          letterSpacing: 4, pointerEvents: "none", whiteSpace: "nowrap",
-        }}>
-          ARRASTRA · ZOOM 
-        </div>
-      )}
+        <>
+          {/* TEXTO AYUDA — centrado inferior con margen safe */}
+          <div style={{
+            position: "absolute",
+            bottom: "env(safe-area-inset-bottom, 20px)",
+            marginBottom: 70, // espacio para los botones de abajo
+            left: "50%", transform: "translateX(-50%)",
+            color: "rgba(0, 8, 3, 0.35)", fontSize: 14,
+            fontFamily: "'Space Mono', monospace", fontWeight: 700,
+            letterSpacing: 4, pointerEvents: "none", whiteSpace: "nowrap",
+          }}>
+            ARRASTRA · ZOOM
+          </div>
 
-      {/* BOTÓN INFO */}
-      {entered && ready && (
-        <button onClick={() => setShowInfo(true)} className="btn-ui" style={{
-          position: "absolute", bottom: 20, left: 20,
-          background: "rgba(0,0,0,0.5)",
-          border: "1px solid rgba(74,222,128,0.25)",
-          borderRadius: 3, padding: "0 20px", height: 42,
-          color: "#4ade80", fontSize: 10,
-          fontFamily: "'Space Mono', monospace", fontWeight: 700,
-          letterSpacing: 3, cursor: "pointer", backdropFilter: "blur(8px)",
-        }}>
-          🌿 INFO
-        </button>
-      )}
+          {/* BARRA DE BOTONES INFERIOR — siempre visible y fuera del canvas */}
+          <div style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0, right: 0,
+            height: `calc(56px + env(safe-area-inset-bottom, 0px))`,
+            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingLeft: 16,
+            paddingRight: 16,
+            pointerEvents: "none",
+            zIndex: 50,
+          }}>
+            {/* BOTÓN INFO */}
+            <button
+              onClick={() => setShowInfo(true)}
+              className="btn-ui"
+              style={{
+                pointerEvents: "all",
+                background: "rgba(0,0,0,0.6)",
+                border: "1px solid rgba(74,222,128,0.3)",
+                borderRadius: 4, padding: "0 18px", height: 44,
+                color: "#4ade80", fontSize: 10,
+                fontFamily: "'Space Mono', monospace", fontWeight: 700,
+                letterSpacing: 3, cursor: "pointer",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                display: "flex", alignItems: "center", gap: 6,
+              }}
+            >
+              🌿 INFO
+            </button>
 
-      {/* BOTÓN MUTE */}
-      {entered && ready && (
-        <button onClick={toggleMute} className="btn-ui" style={{
-          position: "absolute", bottom: 20, right: 20,
-          background: "rgba(0,0,0,0.5)",
-          border: "1px solid rgba(74,222,128,0.25)",
-          borderRadius: "50%", width: 42, height: 42,
-          color: "#4ade80", fontSize: 18, cursor: "pointer",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          backdropFilter: "blur(8px)",
-        }}>
-          {muted ? "🔇" : "🔊"}
-        </button>
+            {/* BOTÓN MUTE — con feedback visual claro */}
+            <button
+              onClick={toggleMute}
+              className="btn-ui"
+              title={muted ? "Activar sonido" : "Silenciar"}
+              style={{
+                pointerEvents: "all",
+                background: muted
+                  ? "rgba(74,222,128,0.12)"
+                  : "rgba(0,0,0,0.6)",
+                border: muted
+                  ? "1px solid rgba(74,222,128,0.6)"
+                  : "1px solid rgba(74,222,128,0.3)",
+                borderRadius: "50%", width: 44, height: 44,
+                color: "#4ade80", fontSize: 20, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {muted ? "🔇" : "🔊"}
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
